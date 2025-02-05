@@ -21,10 +21,12 @@ const register = async (req,res) => {
     await newUser.save()
 
     //sign jwt and genrate token
-    jwt.sign()
+    const token = jwt.sign({ id: newUser._id }, process.env.SECRETPASS, { expiresIn: '1h' });
+
 
     return res.status(201).json({
         "user":newUser,
+        "token":token,
         "message":"User registration successfyully"
     })
     
@@ -55,7 +57,7 @@ const login = async (req,res) => {
             });
         }
 
-        const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.SECRETPASS, { expiresIn: '1h' });
 
         return res.status(200).json({
             "token": token,
